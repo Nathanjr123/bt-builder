@@ -1,8 +1,26 @@
 import { useI18n } from '../i18n/I18nContext';
 import { useTreeStore } from '../store/useTreeStore';
 import { EXAMPLE_PRESETS } from '../exampleTree';
+import { useFullscreen } from '../hooks/useFullscreen';
 import type { Language } from '../types';
 import type { SaveStatus } from '../App';
+
+function FullscreenButton() {
+  const { t } = useI18n();
+  const { isFullscreen, toggle, supported } = useFullscreen();
+  if (!supported) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => void toggle()}
+      title={isFullscreen ? t('exitFullscreen') : t('enterFullscreen')}
+      aria-label={isFullscreen ? t('exitFullscreen') : t('enterFullscreen')}
+      className="rounded-md border border-slate-600 px-2 py-1 text-sm leading-none text-slate-200 transition-colors hover:bg-slate-700"
+    >
+      {isFullscreen ? '🗗' : '⛶'}
+    </button>
+  );
+}
 
 function ProfileBadge({
   profile,
@@ -141,6 +159,7 @@ export default function Header({
         >
           {showExport ? t('hideExport') : t('showExport')}
         </button>
+        <FullscreenButton />
         <ProfileBadge profile={profile} saveStatus={saveStatus} onSwitchProfile={onSwitchProfile} />
         <LanguageToggle />
       </div>

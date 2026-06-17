@@ -18,6 +18,7 @@ export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export default function App() {
   const [showExport, setShowExport] = useState(true);
+  const [exportMinimized, setExportMinimized] = useState(false);
   const [profile, setProfile] = useState<string | null>(getCurrentProfile);
   const [showProfile, setShowProfile] = useState<boolean>(() => getCurrentProfile() === null);
   const [showHelp, setShowHelp] = useState(false);
@@ -78,7 +79,12 @@ export default function App() {
     <div className="flex h-full w-full flex-col overflow-hidden bg-slate-100">
       <Header
         showExport={showExport}
-        onToggleExport={() => setShowExport((s) => !s)}
+        onToggleExport={() => {
+          setShowExport((s) => {
+            if (!s) setExportMinimized(false);
+            return !s;
+          });
+        }}
         onOpenHelp={() => setShowHelp(true)}
         profile={profile}
         saveStatus={saveStatus}
@@ -94,8 +100,16 @@ export default function App() {
             <Canvas />
           </div>
           {showExport && (
-            <div className="h-2/5 min-h-[180px] shrink-0 border-t border-slate-700">
-              <ExportPanel />
+            <div
+              className={`shrink-0 border-t border-slate-700 ${
+                exportMinimized ? 'h-auto' : 'h-2/5 min-h-[180px]'
+              }`}
+            >
+              <ExportPanel
+                minimized={exportMinimized}
+                onToggleMinimize={() => setExportMinimized((m) => !m)}
+                onClose={() => setShowExport(false)}
+              />
             </div>
           )}
         </main>

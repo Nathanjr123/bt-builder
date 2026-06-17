@@ -49,6 +49,11 @@ export const TRANSLATIONS = {
   copied: { en: 'Copied!', pl: 'Skopiowano!' },
   showExport: { en: 'Show Code', pl: 'Pokaż kod' },
   hideExport: { en: 'Hide Code', pl: 'Ukryj kod' },
+  minimizePanel: { en: 'Minimize', pl: 'Minimalizuj' },
+  restorePanel: { en: 'Restore', pl: 'Przywróć' },
+  closePanel: { en: 'Close', pl: 'Zamknij' },
+  enterFullscreen: { en: 'Fullscreen', pl: 'Pełny ekran' },
+  exitFullscreen: { en: 'Exit fullscreen', pl: 'Zamknij pełny ekran' },
 
   // Validation
   validationOk: { en: 'Tree is valid.', pl: 'Drzewo jest poprawne.' },
