@@ -23,7 +23,7 @@ export default function HelpModal({ onClose }: { onClose: () => void }) {
   const loadExample = useTreeStore((s) => s.loadExample);
 
   const loadAndClose = (presetId: string) => {
-    loadExample(presetId);
+    loadExample(presetId, lang);
     onClose();
   };
 

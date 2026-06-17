@@ -7,9 +7,9 @@ import {
   type NodeChange,
   type EdgeChange,
 } from 'reactflow';
-import type { BTNode, BTEdge, BTNodeKind } from '../types';
+import type { BTNode, BTEdge, BTNodeKind, Language } from '../types';
 import { DEFINITION_BY_KIND, defaultParamsFor } from '../nodeDefinitions';
-import { EXAMPLE_PRESETS } from '../exampleTree';
+import { EXAMPLE_PRESETS, materializeExampleNodes } from '../exampleTree';
 
 let idCounter = 1;
 function nextId(): string {
@@ -42,7 +42,7 @@ interface TreeState {
   deleteNode: (id: string) => void;
   selectNode: (id: string | null) => void;
   clearCanvas: () => void;
-  loadExample: (presetId?: string) => void;
+  loadExample: (presetId?: string, lang?: Language) => void;
   setTree: (nodes: BTNode[], edges: BTEdge[]) => void;
 }
 
@@ -121,9 +121,9 @@ export const useTreeStore = create<TreeState>((set, get) => ({
 
   clearCanvas: () => set({ nodes: [], edges: [], selectedNodeId: null }),
 
-  loadExample: (presetId) => {
+  loadExample: (presetId, lang = 'en') => {
     const preset = EXAMPLE_PRESETS.find((p) => p.id === presetId) ?? EXAMPLE_PRESETS[0];
-    const nodes = preset.nodes.map((n) => ({ ...n, data: { ...n.data, params: { ...n.data.params } } }));
+    const nodes = materializeExampleNodes(preset.nodes, lang);
     bumpCounterPast(nodes);
     set({ nodes, edges: preset.edges.map((e) => ({ ...e })), selectedNodeId: null });
   },

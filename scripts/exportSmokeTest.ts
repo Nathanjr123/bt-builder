@@ -1,10 +1,11 @@
 import { exportTree } from '../src/hooks/useTreeExporter.ts';
-import { EXAMPLE_PRESETS } from '../src/exampleTree.ts';
+import { EXAMPLE_PRESETS, materializeExampleNodes } from '../src/exampleTree.ts';
 
 let ok = true;
 
 for (const preset of EXAMPLE_PRESETS) {
-  const { yaml, validation } = exportTree(preset.nodes, preset.edges, 'en');
+  const nodes = materializeExampleNodes(preset.nodes, 'en');
+  const { yaml, validation } = exportTree(nodes, preset.edges, 'en');
   console.log(`\n=== ${preset.id} ===`);
   console.log(yaml);
   console.log('Warnings:', validation.warnings);

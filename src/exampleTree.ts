@@ -1,27 +1,45 @@
-import type { BTNode, BTEdge } from './types';
+import type { BTNode, BTNodeData, BTEdge, Language } from './types';
+
+// Example nodes carry bilingual labels so a preset loaded in Polish shows
+// Polish node titles on the canvas (and English in English). They are
+// "materialised" into plain BTNodes for the active language at load time.
+type LabeledNodeData = Omit<BTNodeData, 'customLabel'> & {
+  customLabel: { en: string; pl: string };
+};
+type LabeledNode = Omit<BTNode, 'data'> & { data: LabeledNodeData };
 
 export interface ExamplePreset {
   id: string;
   name: { en: string; pl: string };
   description: { en: string; pl: string };
-  nodes: BTNode[];
+  nodes: LabeledNode[];
   edges: BTEdge[];
 }
 
 // --- Preset 1: Combat priorities -----------------------------------------
 // Mirrors the export blueprint: heal in an emergency, otherwise engage.
-const combatNodes: BTNode[] = [
+const combatNodes: LabeledNode[] = [
   {
     id: 'c-root',
     type: 'btNode',
     position: { x: 360, y: 20 },
-    data: { kind: 'selector', category: 'composite', customLabel: 'Root Priority', params: {} },
+    data: {
+      kind: 'selector',
+      category: 'composite',
+      customLabel: { en: 'Root Priority', pl: 'Priorytet główny' },
+      params: {},
+    },
   },
   {
     id: 'c-seq-heal',
     type: 'btNode',
     position: { x: 120, y: 180 },
-    data: { kind: 'sequence', category: 'composite', customLabel: 'Emergency Healing', params: {} },
+    data: {
+      kind: 'sequence',
+      category: 'composite',
+      customLabel: { en: 'Emergency Healing', pl: 'Awaryjne leczenie' },
+      params: {},
+    },
   },
   {
     id: 'c-cond-health',
@@ -30,7 +48,7 @@ const combatNodes: BTNode[] = [
     data: {
       kind: 'healthCheck',
       category: 'condition',
-      customLabel: 'Health Below 35%',
+      customLabel: { en: 'Health Below 35%', pl: 'Zdrowie poniżej 35%' },
       params: { threshold: 35 },
     },
   },
@@ -41,7 +59,7 @@ const combatNodes: BTNode[] = [
     data: {
       kind: 'castAbility',
       category: 'action',
-      customLabel: 'Drink Health Potion',
+      customLabel: { en: 'Drink Health Potion', pl: 'Wypij miksturę zdrowia' },
       params: { ability: 'health_potion' },
     },
   },
@@ -49,7 +67,12 @@ const combatNodes: BTNode[] = [
     id: 'c-seq-attack',
     type: 'btNode',
     position: { x: 560, y: 180 },
-    data: { kind: 'sequence', category: 'composite', customLabel: 'Engage Enemy', params: {} },
+    data: {
+      kind: 'sequence',
+      category: 'composite',
+      customLabel: { en: 'Engage Enemy', pl: 'Zaatakuj wroga' },
+      params: {},
+    },
   },
   {
     id: 'c-cond-range',
@@ -58,7 +81,7 @@ const combatNodes: BTNode[] = [
     data: {
       kind: 'enemyDistance',
       category: 'condition',
-      customLabel: 'Enemy In Range',
+      customLabel: { en: 'Enemy In Range', pl: 'Wróg w zasięgu' },
       params: { range: 12 },
     },
   },
@@ -69,7 +92,7 @@ const combatNodes: BTNode[] = [
     data: {
       kind: 'castAbility',
       category: 'action',
-      customLabel: 'Cast Fireball',
+      customLabel: { en: 'Cast Fireball', pl: 'Rzuć kulę ognia' },
       params: { ability: 'fireball' },
     },
   },
@@ -86,18 +109,28 @@ const combatEdges: BTEdge[] = [
 
 // --- Preset 2: Survival & patrol -----------------------------------------
 // Retreat when badly hurt, use a cooldown heal if ready, otherwise patrol.
-const survivalNodes: BTNode[] = [
+const survivalNodes: LabeledNode[] = [
   {
     id: 's-root',
     type: 'btNode',
     position: { x: 420, y: 20 },
-    data: { kind: 'selector', category: 'composite', customLabel: 'Survival Priority', params: {} },
+    data: {
+      kind: 'selector',
+      category: 'composite',
+      customLabel: { en: 'Survival Priority', pl: 'Priorytet przetrwania' },
+      params: {},
+    },
   },
   {
     id: 's-seq-retreat',
     type: 'btNode',
     position: { x: 100, y: 180 },
-    data: { kind: 'sequence', category: 'composite', customLabel: 'Retreat When Low', params: {} },
+    data: {
+      kind: 'sequence',
+      category: 'composite',
+      customLabel: { en: 'Retreat When Low', pl: 'Wycofaj się przy niskim zdrowiu' },
+      params: {},
+    },
   },
   {
     id: 's-cond-hp',
@@ -106,7 +139,7 @@ const survivalNodes: BTNode[] = [
     data: {
       kind: 'healthCheck',
       category: 'condition',
-      customLabel: 'Critically Hurt',
+      customLabel: { en: 'Critically Hurt', pl: 'Krytycznie ranny' },
       params: { threshold: 25 },
     },
   },
@@ -117,7 +150,7 @@ const survivalNodes: BTNode[] = [
     data: {
       kind: 'moveTo',
       category: 'action',
-      customLabel: 'Flee To Safe Zone',
+      customLabel: { en: 'Flee To Safe Zone', pl: 'Uciekaj do bezpiecznej strefy' },
       params: { x: -50, y: 0 },
     },
   },
@@ -125,7 +158,12 @@ const survivalNodes: BTNode[] = [
     id: 's-seq-heal',
     type: 'btNode',
     position: { x: 430, y: 180 },
-    data: { kind: 'sequence', category: 'composite', customLabel: 'Cooldown Heal', params: {} },
+    data: {
+      kind: 'sequence',
+      category: 'composite',
+      customLabel: { en: 'Cooldown Heal', pl: 'Leczenie z odnowienia' },
+      params: {},
+    },
   },
   {
     id: 's-cond-cd',
@@ -134,7 +172,7 @@ const survivalNodes: BTNode[] = [
     data: {
       kind: 'cooldownStatus',
       category: 'condition',
-      customLabel: 'Second Wind Ready',
+      customLabel: { en: 'Second Wind Ready', pl: 'Drugi oddech gotowy' },
       params: { ability: 'second_wind' },
     },
   },
@@ -145,7 +183,7 @@ const survivalNodes: BTNode[] = [
     data: {
       kind: 'castAbility',
       category: 'action',
-      customLabel: 'Cast Second Wind',
+      customLabel: { en: 'Cast Second Wind', pl: 'Rzuć drugi oddech' },
       params: { ability: 'second_wind' },
     },
   },
@@ -153,7 +191,12 @@ const survivalNodes: BTNode[] = [
     id: 's-seq-patrol',
     type: 'btNode',
     position: { x: 760, y: 180 },
-    data: { kind: 'sequence', category: 'composite', customLabel: 'Default Patrol', params: {} },
+    data: {
+      kind: 'sequence',
+      category: 'composite',
+      customLabel: { en: 'Default Patrol', pl: 'Domyślny patrol' },
+      params: {},
+    },
   },
   {
     id: 's-act-patrol',
@@ -162,7 +205,7 @@ const survivalNodes: BTNode[] = [
     data: {
       kind: 'moveTo',
       category: 'action',
-      customLabel: 'Walk Patrol Route',
+      customLabel: { en: 'Walk Patrol Route', pl: 'Idź trasą patrolu' },
       params: { x: 100, y: 0 },
     },
   },
@@ -202,6 +245,18 @@ export const EXAMPLE_PRESETS: ExamplePreset[] = [
   },
 ];
 
+// Resolve a preset's bilingual node labels into plain BTNodes for one language.
+export function materializeExampleNodes(nodes: LabeledNode[], lang: Language): BTNode[] {
+  return nodes.map((n) => ({
+    ...n,
+    data: {
+      ...n.data,
+      customLabel: n.data.customLabel[lang],
+      params: { ...n.data.params },
+    },
+  }));
+}
+
 // Convenience exports for the default preset (used by the smoke test).
-export const EXAMPLE_NODES = combatNodes;
+export const EXAMPLE_NODES = materializeExampleNodes(combatNodes, 'en');
 export const EXAMPLE_EDGES = combatEdges;
