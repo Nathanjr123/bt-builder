@@ -123,6 +123,28 @@ export const TRANSLATIONS = {
   gotIt: { en: 'Got it — start building', pl: 'Rozumiem — zacznij budować' },
   dontShowAgain: { en: 'Don’t show this automatically', pl: 'Nie pokazuj automatycznie' },
 
+  // Profiles / persistence
+  profileTitle: { en: 'Choose your profile', pl: 'Wybierz swój profil' },
+  profileIntro: {
+    en: 'Pick a profile name to load and continue your work — no password needed. Your tree is saved automatically.',
+    pl: 'Wybierz nazwę profilu, aby wczytać i kontynuować pracę — bez hasła. Twoje drzewo zapisuje się automatycznie.',
+  },
+  existingProfiles: { en: 'Continue a profile', pl: 'Kontynuuj profil' },
+  noProfilesYet: { en: 'No saved profiles yet.', pl: 'Brak zapisanych profili.' },
+  newProfile: { en: 'Create a new profile', pl: 'Utwórz nowy profil' },
+  profileNamePlaceholder: { en: 'e.g. KayuuWow', pl: 'np. KayuuWow' },
+  createAndContinue: { en: 'Create & continue', pl: 'Utwórz i kontynuuj' },
+  continueLabel: { en: 'Continue', pl: 'Kontynuuj' },
+  switchProfile: { en: 'Switch profile', pl: 'Zmień profil' },
+  loadingProfiles: { en: 'Loading…', pl: 'Wczytywanie…' },
+  cloudOn: { en: 'Cloud sync on — available on any device', pl: 'Synchronizacja w chmurze — dostępne na każdym urządzeniu' },
+  cloudOff: { en: 'Local mode — saved on this device only', pl: 'Tryb lokalny — zapis tylko na tym urządzeniu' },
+  saving: { en: 'Saving…', pl: 'Zapisywanie…' },
+  saved: { en: 'Saved', pl: 'Zapisano' },
+  saveError: { en: 'Save failed', pl: 'Błąd zapisu' },
+  profileTaken: { en: 'That name already exists — continue it below.', pl: 'Ta nazwa już istnieje — kontynuuj ją poniżej.' },
+  signedInAs: { en: 'Profile', pl: 'Profil' },
+
   // Misc
   language: { en: 'Language', pl: 'Język' },
   emptyCanvasHint: {

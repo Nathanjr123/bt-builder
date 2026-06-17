@@ -43,6 +43,7 @@ interface TreeState {
   selectNode: (id: string | null) => void;
   clearCanvas: () => void;
   loadExample: (presetId?: string) => void;
+  setTree: (nodes: BTNode[], edges: BTEdge[]) => void;
 }
 
 export const useTreeStore = create<TreeState>((set, get) => ({
@@ -125,5 +126,10 @@ export const useTreeStore = create<TreeState>((set, get) => ({
     const nodes = preset.nodes.map((n) => ({ ...n, data: { ...n.data, params: { ...n.data.params } } }));
     bumpCounterPast(nodes);
     set({ nodes, edges: preset.edges.map((e) => ({ ...e })), selectedNodeId: null });
+  },
+
+  setTree: (nodes, edges) => {
+    bumpCounterPast(nodes);
+    set({ nodes, edges, selectedNodeId: null });
   },
 }));

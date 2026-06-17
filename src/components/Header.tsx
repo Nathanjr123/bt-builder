@@ -2,6 +2,46 @@ import { useI18n } from '../i18n/I18nContext';
 import { useTreeStore } from '../store/useTreeStore';
 import { EXAMPLE_PRESETS } from '../exampleTree';
 import type { Language } from '../types';
+import type { SaveStatus } from '../App';
+
+function ProfileBadge({
+  profile,
+  saveStatus,
+  onSwitchProfile,
+}: {
+  profile: string | null;
+  saveStatus: SaveStatus;
+  onSwitchProfile: () => void;
+}) {
+  const { t } = useI18n();
+  if (!profile) return null;
+
+  const statusText =
+    saveStatus === 'saving'
+      ? t('saving')
+      : saveStatus === 'error'
+        ? t('saveError')
+        : saveStatus === 'saved'
+          ? t('saved')
+          : '';
+  const statusColor =
+    saveStatus === 'error' ? 'text-red-400' : saveStatus === 'saving' ? 'text-amber-300' : 'text-emerald-400';
+
+  return (
+    <button
+      type="button"
+      onClick={onSwitchProfile}
+      title={t('switchProfile')}
+      className="flex items-center gap-2 rounded-md border border-slate-600 px-2 py-1 transition-colors hover:bg-slate-700"
+    >
+      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold uppercase text-white">
+        {profile.slice(0, 2)}
+      </span>
+      <span className="hidden text-xs font-medium text-slate-200 sm:inline">{profile}</span>
+      {statusText && <span className={`hidden text-[10px] md:inline ${statusColor}`}>{statusText}</span>}
+    </button>
+  );
+}
 
 function LanguageToggle() {
   const { lang, setLang, t } = useI18n();
@@ -31,10 +71,16 @@ export default function Header({
   showExport,
   onToggleExport,
   onOpenHelp,
+  profile,
+  saveStatus,
+  onSwitchProfile,
 }: {
   showExport: boolean;
   onToggleExport: () => void;
   onOpenHelp: () => void;
+  profile: string | null;
+  saveStatus: SaveStatus;
+  onSwitchProfile: () => void;
 }) {
   const { lang, t } = useI18n();
   const loadExample = useTreeStore((s) => s.loadExample);
@@ -95,6 +141,7 @@ export default function Header({
         >
           {showExport ? t('hideExport') : t('showExport')}
         </button>
+        <ProfileBadge profile={profile} saveStatus={saveStatus} onSwitchProfile={onSwitchProfile} />
         <LanguageToggle />
       </div>
     </header>

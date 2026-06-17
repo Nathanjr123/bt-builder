@@ -18,6 +18,9 @@ Stack: **Vite · React · TypeScript · Tailwind CSS · React Flow · Zustand**.
 - **Property panel** — configure each node's custom label and parameters.
 - **Live YAML preview** — updates as you build, with built-in validation.
 - **Export to YAML** — download a ready-to-use strategy file.
+- **Profiles & cross-device sync** — pick a profile name (no password) and your
+  tree auto-saves. Works on one device out of the box; connect a free Supabase
+  backend to continue from any PC. See [SETUP_SUPABASE.md](SETUP_SUPABASE.md).
 
 ---
 
