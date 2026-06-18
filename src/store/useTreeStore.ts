@@ -7,9 +7,21 @@ import {
   type NodeChange,
   type EdgeChange,
 } from 'reactflow';
-import type { BTNode, BTEdge, BTNodeKind, Language } from '../types';
+import type { BTNode, BTEdge, BTNodeKind } from '../types';
 import { DEFINITION_BY_KIND, defaultParamsFor } from '../nodeDefinitions';
-import { EXAMPLE_PRESETS, materializeExampleNodes } from '../exampleTree';
+import { EXAMPLE_PRESETS, materializeExampleNodes, findExampleLabel } from '../exampleTree';
+
+// Convert a plain title baked in by an older example load back into a bilingual
+// label so it can translate live. User-typed titles we don't recognise are left
+// untouched.
+function migrateExampleLabels(nodes: BTNode[]): BTNode[] {
+  return nodes.map((n) => {
+    if (n.data.labelI18n || !n.data.customLabel.trim()) return n;
+    const match = findExampleLabel(n.data.customLabel);
+    if (!match) return n;
+    return { ...n, data: { ...n.data, customLabel: '', labelI18n: match } };
+  });
+}
 
 let idCounter = 1;
 function nextId(): string {
@@ -42,7 +54,7 @@ interface TreeState {
   deleteNode: (id: string) => void;
   selectNode: (id: string | null) => void;
   clearCanvas: () => void;
-  loadExample: (presetId?: string, lang?: Language) => void;
+  loadExample: (presetId?: string) => void;
   setTree: (nodes: BTNode[], edges: BTEdge[]) => void;
 }
 
@@ -121,15 +133,16 @@ export const useTreeStore = create<TreeState>((set, get) => ({
 
   clearCanvas: () => set({ nodes: [], edges: [], selectedNodeId: null }),
 
-  loadExample: (presetId, lang = 'en') => {
+  loadExample: (presetId) => {
     const preset = EXAMPLE_PRESETS.find((p) => p.id === presetId) ?? EXAMPLE_PRESETS[0];
-    const nodes = materializeExampleNodes(preset.nodes, lang);
+    const nodes = materializeExampleNodes(preset.nodes);
     bumpCounterPast(nodes);
     set({ nodes, edges: preset.edges.map((e) => ({ ...e })), selectedNodeId: null });
   },
 
   setTree: (nodes, edges) => {
-    bumpCounterPast(nodes);
-    set({ nodes, edges, selectedNodeId: null });
+    const migrated = migrateExampleLabels(nodes);
+    bumpCounterPast(migrated);
+    set({ nodes: migrated, edges, selectedNodeId: null });
   },
 }));

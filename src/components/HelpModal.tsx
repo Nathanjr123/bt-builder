@@ -23,7 +23,7 @@ export default function HelpModal({ onClose }: { onClose: () => void }) {
   const loadExample = useTreeStore((s) => s.loadExample);
 
   const loadAndClose = (presetId: string) => {
-    loadExample(presetId, lang);
+    loadExample(presetId);
     onClose();
   };
 
@@ -53,7 +53,7 @@ export default function HelpModal({ onClose }: { onClose: () => void }) {
             type="button"
             onClick={onClose}
             className="rounded px-2 text-xl leading-none text-slate-300 hover:bg-slate-700 hover:text-white"
-            aria-label="close"
+            aria-label={t('close')}
           >
             ×
           </button>

@@ -1,4 +1,4 @@
-import type { NodeDefinition, BTNodeKind } from './types';
+import type { NodeDefinition, BTNodeKind, BTNodeData, Language } from './types';
 
 // The complete catalogue of node kinds the manager can place on the canvas.
 // Each entry is bilingual and self-describes how it is configured and exported.
@@ -216,6 +216,19 @@ export const DEFINITION_BY_KIND: Record<BTNodeKind, NodeDefinition> =
     acc[def.kind] = def;
     return acc;
   }, {} as Record<BTNodeKind, NodeDefinition>);
+
+// Resolve the title shown for a node in the active language. A user-typed
+// custom label wins; otherwise fall back to the bilingual preset label, then
+// to the node definition's name.
+export function nodeDisplayName(
+  data: Pick<BTNodeData, 'kind' | 'customLabel' | 'labelI18n'>,
+  lang: Language,
+): string {
+  const custom = data.customLabel.trim();
+  if (custom) return custom;
+  if (data.labelI18n) return data.labelI18n[lang];
+  return DEFINITION_BY_KIND[data.kind].label[lang];
+}
 
 // Build the default parameter map for a freshly created node of a given kind.
 export function defaultParamsFor(kind: BTNodeKind): Record<string, string | number> {

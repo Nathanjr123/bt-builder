@@ -245,18 +245,36 @@ export const EXAMPLE_PRESETS: ExamplePreset[] = [
   },
 ];
 
-// Resolve a preset's bilingual node labels into plain BTNodes for one language.
-export function materializeExampleNodes(nodes: LabeledNode[], lang: Language): BTNode[] {
+// Materialise a preset into plain BTNodes. The bilingual title is carried on
+// `labelI18n` (and customLabel left empty) so the node title follows whatever
+// language is active, switching live when the user toggles EN/PL.
+export function materializeExampleNodes(nodes: LabeledNode[], _lang?: Language): BTNode[] {
   return nodes.map((n) => ({
     ...n,
     data: {
-      ...n.data,
-      customLabel: n.data.customLabel[lang],
+      kind: n.data.kind,
+      category: n.data.category,
+      customLabel: '',
+      labelI18n: { en: n.data.customLabel.en, pl: n.data.customLabel.pl },
       params: { ...n.data.params },
     },
   }));
 }
 
+// Reverse lookup so trees saved before bilingual labels existed (where the
+// title was baked in as a plain English/Polish string) can be migrated back to
+// a bilingual `labelI18n`, letting their titles translate live again.
+const LABEL_BY_TEXT = new Map<string, { en: string; pl: string }>();
+for (const n of [...combatNodes, ...survivalNodes]) {
+  const label = { en: n.data.customLabel.en, pl: n.data.customLabel.pl };
+  LABEL_BY_TEXT.set(label.en.trim().toLowerCase(), label);
+  LABEL_BY_TEXT.set(label.pl.trim().toLowerCase(), label);
+}
+
+export function findExampleLabel(text: string): { en: string; pl: string } | null {
+  return LABEL_BY_TEXT.get(text.trim().toLowerCase()) ?? null;
+}
+
 // Convenience exports for the default preset (used by the smoke test).
-export const EXAMPLE_NODES = materializeExampleNodes(combatNodes, 'en');
+export const EXAMPLE_NODES = materializeExampleNodes(combatNodes);
 export const EXAMPLE_EDGES = combatEdges;

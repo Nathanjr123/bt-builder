@@ -13,7 +13,7 @@ export default function ProfileModal({
   onSelect: (name: string) => void;
   onClose?: () => void;
 }) {
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
   const [profiles, setProfiles] = useState<ProfileSummary[] | null>(null);
   const [newName, setNewName] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +42,7 @@ export default function ProfileModal({
   const formatDate = (iso: string | null) => {
     if (!iso) return '';
     const d = new Date(iso);
-    return Number.isNaN(d.getTime()) ? '' : d.toLocaleString();
+    return Number.isNaN(d.getTime()) ? '' : d.toLocaleString(lang === 'pl' ? 'pl-PL' : 'en-US');
   };
 
   return (
@@ -59,7 +59,7 @@ export default function ProfileModal({
               type="button"
               onClick={onClose}
               className="rounded px-2 text-xl leading-none text-slate-300 hover:bg-slate-700 hover:text-white"
-              aria-label="close"
+              aria-label={t('close')}
             >
               ×
             </button>

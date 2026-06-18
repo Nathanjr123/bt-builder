@@ -57,8 +57,11 @@ export interface NodeDefinition {
 export interface BTNodeData {
   kind: BTNodeKind;
   category: NodeCategory;
-  // User-defined custom title (falls back to the definition label).
+  // User-defined custom title. When set, it wins and is shown verbatim.
   customLabel: string;
+  // Bilingual default title (e.g. from an example preset). Used when the user
+  // hasn't typed a custom label, so the title follows the active language.
+  labelI18n?: { en: string; pl: string };
   // Current parameter values keyed by ParamDefinition.key.
   params: Record<string, string | number>;
 }

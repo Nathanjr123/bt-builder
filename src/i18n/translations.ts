@@ -11,6 +11,7 @@ export const TRANSLATIONS = {
 
   // Palette
   paletteTitle: { en: 'Node Palette', pl: 'Paleta węzłów' },
+  togglePalette: { en: 'Toggle palette', pl: 'Przełącz paletę' },
   paletteHint: {
     en: 'Drag onto the canvas, or click to add at the centre.',
     pl: 'Przeciągnij na planszę lub kliknij, aby dodać na środku.',
@@ -152,6 +153,7 @@ export const TRANSLATIONS = {
 
   // Misc
   language: { en: 'Language', pl: 'Język' },
+  close: { en: 'Close', pl: 'Zamknij' },
   emptyCanvasHint: {
     en: 'Drag a node from the palette, or click one to start building.',
     pl: 'Przeciągnij węzeł z palety lub kliknij, aby rozpocząć budowę.',

@@ -131,7 +131,7 @@ export default function Header({
         <select
           value=""
           onChange={(e) => {
-            if (e.target.value) loadExample(e.target.value, lang);
+            if (e.target.value) loadExample(e.target.value);
           }}
           className="rounded-md border border-slate-600 bg-slate-800 px-2 py-1 text-xs font-medium text-slate-200 transition-colors hover:bg-slate-700 focus:outline-none"
           title={t('loadExample')}

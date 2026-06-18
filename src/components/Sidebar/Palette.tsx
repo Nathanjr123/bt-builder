@@ -77,7 +77,7 @@ export default function Palette() {
           type="button"
           onClick={() => setCollapsed((c) => !c)}
           className="rounded px-1.5 text-slate-400 hover:bg-slate-200 hover:text-slate-700"
-          aria-label="toggle palette"
+          aria-label={t('togglePalette')}
         >
           {collapsed ? '+' : '–'}
         </button>

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { BTNode, BTEdge, Language } from '../types';
-import { DEFINITION_BY_KIND } from '../nodeDefinitions';
+import { DEFINITION_BY_KIND, nodeDisplayName } from '../nodeDefinitions';
 
 export interface ValidationResult {
   warnings: string[];
@@ -38,6 +38,7 @@ function buildExportNode(
   nodeId: string,
   nodeById: Map<string, BTNode>,
   childrenByParent: Map<string, string[]>,
+  lang: Language,
 ): ExportedNode {
   const node = nodeById.get(nodeId)!;
   const def = DEFINITION_BY_KIND[node.data.kind];
@@ -50,7 +51,7 @@ function buildExportNode(
 
   const exported: ExportedNode = {
     type: def.yamlType,
-    name: node.data.customLabel.trim() || def.label.en,
+    name: nodeDisplayName(node.data, lang),
     params,
     conditions: [],
     actions: [],
@@ -61,7 +62,7 @@ function buildExportNode(
   for (const childId of childIds) {
     const child = nodeById.get(childId);
     if (!child) continue;
-    const childExport = buildExportNode(childId, nodeById, childrenByParent);
+    const childExport = buildExportNode(childId, nodeById, childrenByParent, lang);
     switch (child.data.category) {
       case 'condition':
         exported.conditions.push(childExport);
@@ -149,7 +150,7 @@ function validate(
     if (node.data.category !== 'composite') {
       const kids = childrenByParent.get(node.id);
       if (kids && kids.length > 0) {
-        const label = node.data.customLabel.trim() || DEFINITION_BY_KIND[node.data.kind].label[lang];
+        const label = nodeDisplayName(node.data, lang);
         w(
           `Condition/Action nodes cannot have children: ${label}`,
           `Węzły warunkowe/akcji nie mogą mieć dzieci: ${label}`,
@@ -182,7 +183,7 @@ export function exportTree(nodes: BTNode[], edges: BTEdge[], lang: Language): Ex
 
   let yaml = '';
   if (rootIds.length >= 1) {
-    const tree = buildExportNode(rootIds[0], nodeById, childrenByParent);
+    const tree = buildExportNode(rootIds[0], nodeById, childrenByParent, lang);
     yaml = serialiseNode(tree, 0, false) + '\n';
   } else {
     yaml =

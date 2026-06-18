@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Handle, Position, type NodeProps } from 'reactflow';
 import type { BTNodeData } from '../../types';
-import { DEFINITION_BY_KIND } from '../../nodeDefinitions';
+import { DEFINITION_BY_KIND, nodeDisplayName } from '../../nodeDefinitions';
 import { useI18n } from '../../i18n/I18nContext';
 
 const CATEGORY_STYLES: Record<BTNodeData['category'], { ring: string; badge: string; bar: string }> = {
@@ -14,7 +14,7 @@ function BTNodeComponent({ data, selected }: NodeProps<BTNodeData>) {
   const { lang } = useI18n();
   const def = DEFINITION_BY_KIND[data.kind];
   const styles = CATEGORY_STYLES[data.category];
-  const title = data.customLabel.trim() || def.label[lang];
+  const title = nodeDisplayName(data, lang);
 
   // Build a compact one-line summary of the configured parameters.
   const paramSummary = def.params

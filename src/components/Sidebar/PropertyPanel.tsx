@@ -1,6 +1,6 @@
 import { useTreeStore } from '../../store/useTreeStore';
 import { useI18n } from '../../i18n/I18nContext';
-import { DEFINITION_BY_KIND } from '../../nodeDefinitions';
+import { DEFINITION_BY_KIND, nodeDisplayName } from '../../nodeDefinitions';
 import type { ParamDefinition } from '../../types';
 
 function ParamField({
@@ -115,7 +115,7 @@ export default function PropertyPanel() {
                   <input
                     type="text"
                     value={node.data.customLabel}
-                    placeholder={t('customLabelPlaceholder')}
+                    placeholder={nodeDisplayName(node.data, lang) || t('customLabelPlaceholder')}
                     onChange={(e) => updateNodeLabel(node.id, e.target.value)}
                     className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
                   />
